@@ -28,6 +28,7 @@ export default function SearchResults({ results, loading, error }: SearchResults
     return (
       <div className="text-center py-12">
         <p className="text-gray-500">Aucun restaurant trouvé</p>
+        <p className="text-gray-400 text-sm mt-1">Essayez une autre ville ou un autre mot-clé.</p>
       </div>
     );
   }

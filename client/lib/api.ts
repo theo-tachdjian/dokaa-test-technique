@@ -4,6 +4,7 @@ export interface Restaurant {
   id: string;
   name: string;
   slug: string;
+  city: string;
   address: string;
   rating: number;
   imageUrl: string;
@@ -21,9 +22,24 @@ export interface Review {
 }
 
 export const api = {
-  async searchRestaurants(query: string): Promise<Restaurant[]> {
-    const response = await fetch(`${API_URL}/api/restaurants/search?q=${encodeURIComponent(query)}`);
+  async getCities(): Promise<string[]> {
+    const response = await fetch(`${API_URL}/api/restaurants/cities`);
+    if (!response.ok) throw new Error('Erreur lors de la récupération des villes');
+    return response.json();
+  },
+
+  async searchRestaurants(query: string, city?: string): Promise<Restaurant[]> {
+    const params = new URLSearchParams();
+    if (query) params.append('q', query);
+    if (city) params.append('city', city);
+    const response = await fetch(`${API_URL}/api/restaurants/search?${params.toString()}`);
     if (!response.ok) throw new Error('Erreur lors de la recherche');
+    return response.json();
+  },
+
+  async getRestaurantsByCity(city: string): Promise<Restaurant[]> {
+    const response = await fetch(`${API_URL}/api/restaurants/city/${encodeURIComponent(city)}`);
+    if (!response.ok) throw new Error('Erreur lors de la récupération');
     return response.json();
   },
 

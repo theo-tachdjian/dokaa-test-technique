@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { api, Restaurant } from '@/lib/api';
 
-export function useSearch(query: string) {
+export function useSearch(query: string, city?: string) {
   const [results, setResults] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -19,7 +19,7 @@ export function useSearch(query: string) {
       setError(null);
       
       try {
-        const restaurants = await api.searchRestaurants(query);
+        const restaurants = await api.searchRestaurants(query, city);
         setResults(restaurants);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Erreur inconnue');
@@ -30,7 +30,7 @@ export function useSearch(query: string) {
     }, 300); // Debounce 300ms
 
     return () => clearTimeout(searchTimer);
-  }, [query]);
+  }, [query, city]);
 
   return { results, loading, error };
 }

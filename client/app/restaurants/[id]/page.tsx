@@ -5,6 +5,7 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { api, Restaurant, Review } from '@/lib/api';
+import ReviewsList from '@/components/reviews/ReviewsList';
 
 export default function RestaurantDetailPage() {
   const params = useParams();
@@ -105,39 +106,7 @@ export default function RestaurantDetailPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-6">Avis ({reviews.length})</h2>
-          {reviews.length === 0 ? (
-            <p className="text-gray-500 text-center py-8">
-              Aucun avis disponible pour ce restaurant.
-            </p>
-          ) : (
-            <div className="space-y-4">
-              {reviews.map((review) => (
-                <div key={review.id} className="border-l-4 border-primary-500 pl-4 py-2">
-                  <div className="flex items-start justify-between mb-2">
-                    <div>
-                      <div className="flex items-center mb-1">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <span
-                            key={i}
-                            className={i < review.rating ? 'text-yellow-400' : 'text-gray-300'}
-                          >
-                            ⭐
-                          </span>
-                        ))}
-                        <span className="ml-2 font-semibold">{review.rating}/5</span>
-                      </div>
-                      <p className="text-sm text-gray-600">{review.author}</p>
-                    </div>
-                    <span className="text-sm text-gray-500">{review.date}</span>
-                  </div>
-                  {review.comment && (
-                    <p className="text-gray-700 mt-2">{review.comment}</p>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+          <ReviewsList reviews={reviews} loading={loading} />
         </div>
       </div>
     </div>
