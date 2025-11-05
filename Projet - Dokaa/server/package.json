@@ -7,7 +7,10 @@
     "dev": "nodemon index.js",
     "start": "node index.js",
     "test": "jest --runInBand",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "test-scraper": "node scripts/testTripAdvisorScraper.js",
+    "test-googlemaps": "node scripts/testGoogleMapsScraper.js",
+    "update-all-data": "node scripts/updateAllRealData.js"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +20,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "puppeteer": "^21.0.0",
-    "express-rate-limit": "^7.4.0"
+    "express-rate-limit": "^7.4.0",
+    "axios": "^1.6.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.1",

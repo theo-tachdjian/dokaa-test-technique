@@ -139,6 +139,155 @@ Objectif du jour : mettre en place le système de scraping (même si pas encore 
 
 ---
 
+## Jour 4 - Tests et CI/CD
+
+Objectif du jour : mettre en place des tests et une CI/CD pour que le projet soit vraiment professionnel.
+
+### Tests backend
+
+**Tests d'intégration :**
+- Configuration Jest avec `jest.config.js`
+- Tests pour les routes API (`tests/restaurants.routes.test.js`)
+- Tests pour `/api/health`, `/api/restaurants/cities`, `/api/restaurants/search`, `/api/restaurants/:id/reviews`
+- Utilisation de Supertest pour tester les routes Express
+- Désactivation du scraping pendant les tests avec `DISABLE_SCRAPING=true`
+
+**Structure :**
+- Tests isolés qui ne dépendent pas du scraping réel
+- Utilisation des données mockées pour les tests
+- Gestion des erreurs testée
+
+### CI/CD
+
+**GitHub Actions :**
+- Workflow `.github/workflows/ci.yml` configuré
+- Deux jobs : `backend-test` et `frontend-build-lint`
+- Tests backend automatiques à chaque push
+- Build et lint frontend automatiques
+- Désactivation du scraping pendant les tests CI
+
+**Ce qui fonctionne :**
+- Les tests passent en local
+- La CI se lance automatiquement sur GitHub
+- Les builds sont vérifiés
+
+**Temps passé :** Environ 4-5h (configurer les tests et la CI, ça prend du temps)
+
+---
+
+## Jour 5 - Améliorations UX et fonctionnalités
+
+Objectif du jour : polir l'interface et ajouter des fonctionnalités qui améliorent vraiment l'expérience utilisateur.
+
+### Frontend - Tri et filtres
+
+**Nouveau composant `SortAndFilter.tsx` :**
+- Tri par note (croissant/décroissant)
+- Tri par nom (A-Z / Z-A)
+- Filtre par statut (tous / ouverts uniquement / fermés uniquement)
+- Filtre par note minimum (slider de 0 à 5)
+- Application en temps réel des filtres et tri
+
+**Intégration :**
+- Ajouté dans la page d'accueil, visible quand il y a des résultats
+- Fonctionne avec la recherche et avec la sélection de ville
+- Interface responsive et intuitive
+
+### Améliorations visuelles
+
+**Messages d'erreur améliorés :**
+- Design plus user-friendly avec des cartes d'erreur
+- Messages plus clairs et rassurants
+- Suggestions pour résoudre les problèmes
+
+**Composants améliorés :**
+- `RestaurantCard` : animations au survol, meilleure hiérarchie visuelle, badge de cuisine
+- `ReviewCard` : design plus aéré, meilleure lisibilité
+- `ReviewsList` : compteur d'avis, meilleure présentation
+- `SearchResults` : affichage du nombre de résultats trouvés
+
+**Détails visuels :**
+- Transitions et animations au survol
+- Meilleure utilisation des couleurs et espacements
+- Badges et statuts plus visibles
+
+### Backend - Améliorations scraping
+
+**Logs améliorés :**
+- Messages de debug plus clairs pour identifier les problèmes de sélecteurs
+- Indication du nombre d'avis trouvés
+- Suggestions pour debugger les sélecteurs CSS
+
+**Ce qui fonctionne :**
+- Tous les filtres et tri fonctionnent correctement
+- L'interface est plus agréable à utiliser
+- Les messages d'erreur sont plus clairs
+
+**Temps passé :** Environ 6-7h (ajouter les filtres et polir l'interface, ça prend du temps)
+
+---
+
+## Jour 6 - Système de fiabilité des données
+
+Objectif du jour : garantir que toutes les données affichées sont fiables et vérifiées.
+
+### Backend - Service de validation
+
+**Service `validator.js` :**
+- Validation des URLs Deliveroo (format et domaine)
+- Validation des adresses (format français avec code postal)
+- Validation des notes (0-5)
+- Calcul d'un score de fiabilité (0-100%)
+- Détection de la source des avis (Deliveroo, Google, TripAdvisor)
+
+**Intégration dans les routes :**
+- Validation automatique de tous les restaurants retournés
+- Validation de tous les avis avec détection de source
+- Métadonnées de validation incluses dans chaque réponse API
+
+**Vérifications effectuées :**
+- URL Deliveroo valide et format correct
+- Adresse avec numéro, rue et code postal
+- Note valide entre 0 et 5
+- Présence des données essentielles (nom, image, ville)
+
+### Frontend - Indicateurs de fiabilité
+
+**Composant `VerificationBadge` :**
+- Badge "Vérifié Deliveroo" pour les restaurants fiables
+- Badge "À vérifier" pour les restaurants nécessitant une vérification
+- Badge de source pour les avis (Deliveroo, Google, TripAdvisor)
+- Score de fiabilité affiché pour les restaurants < 90%
+
+**Composant `ReliabilityInfo` :**
+- Panneau dépliable avec détails de fiabilité
+- Barre de progression du score de fiabilité
+- Liste des vérifications passées/échouées
+- Avertissements et erreurs affichés
+
+**Intégration :**
+- Badges sur les cartes restaurants
+- Badges sur les avis (source)
+- Informations détaillées sur la page détail restaurant
+
+### Documentation
+
+**Nouveau document `FIABILITE.md` :**
+- Explication du système de validation
+- Liste des vérifications effectuées
+- Guide d'utilisation pour développeurs
+- Améliorations futures possibles
+
+**Ce qui fonctionne :**
+- Toutes les données sont validées automatiquement
+- Les indicateurs de fiabilité sont visibles partout
+- Les utilisateurs peuvent voir le niveau de confiance des données
+- Les sources des avis sont clairement identifiées
+
+**Temps passé :** Environ 5-6h (créer le système de validation et l'intégrer partout)
+
+---
+
 ## Ce qui reste à faire
 
 ### Pour activer le scraping réel

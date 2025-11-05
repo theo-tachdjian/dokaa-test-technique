@@ -6,25 +6,49 @@ app.listen(PORT, () => {
 });
 
 // Graceful shutdown
-process.on('SIGTERM', async () => {
-  console.log('Shutting down...');
+async function shutdown() {
+  console.log('Fermeture des scrapers...');
   try {
     const scraper = require('./services/scraper');
     await scraper.close();
   } catch (error) {
     // Pas de scraper, rien à fermer
   }
+  try {
+    const tripadvisorScraper = require('./services/tripadvisorScraper');
+    await tripadvisorScraper.close();
+  } catch (error) {
+    // Pas de scraper, rien à fermer
+  }
+  try {
+    const googleMapsScraper = require('./services/googleMapsScraper');
+    await googleMapsScraper.close();
+  } catch (error) {
+    // Pas de scraper, rien à fermer
+  }
+  try {
+    const multiSourceReviewsScraper = require('./services/multiSourceReviewsScraper');
+    await multiSourceReviewsScraper.close();
+  } catch (error) {
+    // Pas de scraper, rien à fermer
+  }
+  try {
+    const googleMapsNetworkInterceptor = require('./services/googleMapsNetworkInterceptor');
+    await googleMapsNetworkInterceptor.close();
+  } catch (error) {
+    // Pas de scraper, rien à fermer
+  }
+}
+
+process.on('SIGTERM', async () => {
+  console.log('Shutting down...');
+  await shutdown();
   process.exit(0);
 });
 
 process.on('SIGINT', async () => {
   console.log('\nShutting down gracefully...');
-  try {
-    const scraper = require('./services/scraper');
-    await scraper.close();
-  } catch (error) {
-    // Pas de scraper, rien à fermer
-  }
+  await shutdown();
   process.exit(0);
 });
 

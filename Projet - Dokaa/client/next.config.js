@@ -7,6 +7,30 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'co-restaurants.roocdn.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'co-restaurants.roocdn',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.roocdn.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.roocdn',
+      },
+      {
+        protocol: 'https',
+        hostname: 'deliveroo.fr',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.deliveroo.fr',
+      },
     ],
   },
 }

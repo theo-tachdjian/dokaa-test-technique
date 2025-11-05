@@ -63,6 +63,14 @@ Bienvenue dans la documentation du projet Backoffice Deliveroo pour Dokaa.
 - GitHub Actions pour CI/CD
 - Coverage et bonnes pratiques
 
+### [FIABILITE.md](./FIABILITE.md)
+**Système de fiabilité des données**
+- Validation automatique des restaurants et avis
+- Vérification des URLs Deliveroo
+- Validation des adresses et données
+- Score de fiabilité et indicateurs visuels
+- Détection de la source des avis
+
 ## Navigation par objectif
 
 ### Je veux comprendre le projet
@@ -82,6 +90,9 @@ Bienvenue dans la documentation du projet Backoffice Deliveroo pour Dokaa.
 
 ### Je veux des exemples de code
 → Lisez [EXEMPLES_CODE.md](./EXEMPLES_CODE.md)
+
+### Je veux comprendre la fiabilité des données
+→ Lisez [FIABILITE.md](./FIABILITE.md)
 
 
 ## Besoin d'aide ?

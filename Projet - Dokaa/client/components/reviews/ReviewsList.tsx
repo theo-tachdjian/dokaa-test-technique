@@ -17,19 +17,29 @@ export default function ReviewsList({ reviews, loading }: ReviewsListProps) {
 
   if (reviews.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
-        Aucun avis disponible pour ce restaurant pour l’instant.
-        <div className="mt-2 text-sm">Les avis réels arrivent bientôt (scraping Deliveroo en cours).</div>
+      <div className="text-center py-12">
+        <div className="bg-gray-50 border border-gray-200 rounded-lg p-8 max-w-md mx-auto">
+          <div className="text-gray-400 text-4xl mb-4">💬</div>
+          <p className="text-gray-700 font-medium mb-2">Aucun avis disponible</p>
+          <p className="text-gray-500 text-sm">Ce restaurant n'a pas encore d'avis pour l'instant.</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold mb-4">Avis ({reviews.length})</h2>
-      {reviews.map((review) => (
-        <ReviewCard key={review.id} review={review} />
-      ))}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-bold text-gray-900">Avis clients</h2>
+        <span className="text-gray-500 text-sm bg-gray-100 px-3 py-1 rounded-full">
+          {reviews.length} {reviews.length === 1 ? 'avis' : 'avis'}
+        </span>
+      </div>
+      <div className="space-y-4">
+        {reviews.map((review) => (
+          <ReviewCard key={review.id} review={review} />
+        ))}
+      </div>
     </div>
   );
 }

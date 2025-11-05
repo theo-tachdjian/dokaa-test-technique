@@ -4,14 +4,16 @@ import { useState, useEffect } from 'react';
 import SearchBar from '@/components/search/SearchBar';
 import SearchResults from '@/components/search/SearchResults';
 import CitySelector from '@/components/search/CitySelector';
+import SortAndFilter from '@/components/search/SortAndFilter';
 import { useSearch } from '@/hooks/useSearch';
-import { api } from '@/lib/api';
+import { api, Restaurant } from '@/lib/api';
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCity, setSelectedCity] = useState('');
   const [cities, setCities] = useState<string[]>([]);
-  const [allRestaurants, setAllRestaurants] = useState<any[]>([]);
+  const [allRestaurants, setAllRestaurants] = useState<Restaurant[]>([]);
+  const [filteredRestaurants, setFilteredRestaurants] = useState<Restaurant[]>([]);
   const [loadingCities, setLoadingCities] = useState(true);
   const { results, loading, error } = useSearch(searchQuery, selectedCity);
 
@@ -37,18 +39,28 @@ export default function Home() {
         try {
           const restaurants = await api.getRestaurantsByCity(selectedCity);
           setAllRestaurants(restaurants);
+          setFilteredRestaurants(restaurants);
         } catch (error) {
           console.error('Erreur chargement restaurants:', error);
         }
       } else {
         setAllRestaurants([]);
+        setFilteredRestaurants([]);
       }
     };
     loadRestaurantsByCity();
   }, [selectedCity, searchQuery]);
 
+  // Mettre à jour les résultats filtrés quand les résultats de recherche changent
+  useEffect(() => {
+    if (searchQuery) {
+      setFilteredRestaurants(results);
+    }
+  }, [results, searchQuery]);
+
   // Afficher les résultats selon le contexte
-  const displayResults = searchQuery ? results : allRestaurants;
+  const displayResults = searchQuery ? filteredRestaurants : filteredRestaurants;
+  const restaurantsForFilter = searchQuery ? results : allRestaurants;
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -72,6 +84,14 @@ export default function Home() {
           />
         )}
         <SearchBar onSearch={setSearchQuery} loading={loading} />
+        
+        {restaurantsForFilter.length > 0 && (
+          <SortAndFilter 
+            restaurants={restaurantsForFilter}
+            onFilteredChange={setFilteredRestaurants}
+          />
+        )}
+        
         <SearchResults 
           results={displayResults} 
           loading={loading && searchQuery.length > 0} 

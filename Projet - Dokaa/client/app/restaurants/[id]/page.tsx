@@ -6,6 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { api, Restaurant, Review } from '@/lib/api';
 import ReviewsList from '@/components/reviews/ReviewsList';
+import VerificationBadge from '@/components/ui/VerificationBadge';
+import ReliabilityInfo from '@/components/ui/ReliabilityInfo';
 
 export default function RestaurantDetailPage() {
   const params = useParams();
@@ -48,10 +50,17 @@ export default function RestaurantDetailPage() {
 
   if (error || !restaurant) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-500 mb-4">{error || 'Restaurant introuvable'}</p>
-          <Link href="/" className="text-primary-500 hover:underline">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+        <div className="text-center bg-white rounded-lg shadow-md p-8 max-w-md">
+          <div className="text-red-500 text-4xl mb-4">⚠️</div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">
+            {error ? 'Erreur de chargement' : 'Restaurant introuvable'}
+          </h2>
+          <p className="text-gray-600 mb-6">{error || 'Le restaurant que vous recherchez n\'existe pas ou a été supprimé.'}</p>
+          <Link 
+            href="/" 
+            className="inline-block bg-primary-500 text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors"
+          >
             Retour à l'accueil
           </Link>
         </div>
@@ -81,7 +90,10 @@ export default function RestaurantDetailPage() {
               />
             </div>
             <div className="p-6 md:w-2/3">
-              <h1 className="text-3xl font-bold mb-2">{restaurant.name}</h1>
+              <div className="flex items-start justify-between mb-2">
+                <h1 className="text-3xl font-bold">{restaurant.name}</h1>
+                <VerificationBadge item={restaurant} size="md" />
+              </div>
               <p className="text-gray-600 mb-4">{restaurant.address}</p>
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center">
@@ -102,6 +114,7 @@ export default function RestaurantDetailPage() {
                 )}
               </div>
             </div>
+            <ReliabilityInfo restaurant={restaurant} />
           </div>
         </div>
 

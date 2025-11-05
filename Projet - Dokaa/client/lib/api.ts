@@ -1,5 +1,19 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
+export interface ValidationMetadata {
+  reliabilityScore?: number;
+  verified?: {
+    address?: boolean;
+    deliverooUrl?: boolean;
+    rating?: boolean;
+    image?: boolean;
+  };
+  needsVerification?: boolean;
+  warnings?: string[];
+  errors?: string[];
+  source?: 'deliveroo' | 'google' | 'tripadvisor' | 'unknown';
+}
+
 export interface Restaurant {
   id: string;
   name: string;
@@ -11,6 +25,7 @@ export interface Restaurant {
   cuisine?: string;
   status: 'open' | 'closed';
   url: string;
+  _validation?: ValidationMetadata;
 }
 
 export interface Review {
@@ -19,6 +34,7 @@ export interface Review {
   comment: string;
   date: string;
   author: string;
+  _validation?: ValidationMetadata;
 }
 
 export const api = {

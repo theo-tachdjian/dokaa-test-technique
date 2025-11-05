@@ -26,8 +26,8 @@ const mockRestaurants = [
     name: 'Sushi Express',
     slug: 'sushi-express',
     city: 'Paris',
-    address: '42 Avenue des Champs-Élysées, 75008 Paris',
-    rating: 4.2,
+    address: '15 Rue de la Paix, 75002 Paris', // Adresse réaliste
+    rating: 4.5,
     imageUrl: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400',
     cuisine: 'Japonaise',
     status: 'open',
@@ -918,63 +918,132 @@ const mockRestaurants = [
 // ATTENTION : Ces avis sont FAUX et seront remplacés par les vrais avis une fois le scraping configuré
 // En production, les vrais avis seront scrapés depuis les pages Deliveroo
 
-// Avis mockés TEMPORAIRES - À REMPLACER par le scraping de vrais avis
-// Ces avis sont uniquement pour tester l'interface en attendant la configuration du scraping
-const mockReviews = {
-  // Exemple d'avis mockés pour quelques restaurants (TEMPORAIRE)
-  // TODO : Remplacer par le scraping de vrais avis depuis Deliveroo
-  '1': [
-    {
-      id: '1-1',
-      rating: 5,
-      comment: 'Excellent restaurant ! Les pâtes sont délicieuses.',
-      date: '2024-01-15',
-      author: 'Marie D.'
-    },
-    {
-      id: '1-2',
-      rating: 4,
-      comment: 'Très bon, je recommande.',
-      date: '2024-01-12',
-      author: 'Pierre M.'
-    },
-    {
-      id: '1-3',
-      rating: 5,
-      comment: 'Parfait !',
-      date: '2024-01-10',
-      author: 'Sophie L.'
-    }
-  ],
-  '2': [
-    {
-      id: '2-1',
-      rating: 5,
-      comment: 'Sushis frais et délicieux !',
-      date: '2024-01-14',
-      author: 'Paul L.'
-    },
-    {
-      id: '2-2',
-      rating: 4,
-      comment: 'Très bon restaurant japonais.',
-      date: '2024-01-11',
-      author: 'Claire D.'
-    }
-  ],
-  '3': [
-    {
-      id: '3-1',
-      rating: 5,
-      comment: 'Meilleurs burgers de Paris !',
-      date: '2024-01-13',
-      author: 'Maxime G.'
-    }
-  ]
-};
+// Fonction pour générer des avis mockés réalistes (10 avis par restaurant)
+function generateMockReviews(restaurantId, restaurantName, cuisine) {
+  const firstNames = ['Marie', 'Pierre', 'Sophie', 'Thomas', 'Emma', 'Lucas', 'Julie', 'Antoine', 'Camille', 'Nicolas', 'Laura', 'Maxime', 'Clara', 'Alexandre', 'Sarah', 'Paul', 'Léa', 'Hugo', 'Chloé', 'Benjamin'];
+  const lastNames = ['Dupont', 'Martin', 'Bernard', 'Dubois', 'Moreau', 'Laurent', 'Simon', 'Michel', 'Lefebvre', 'Garcia', 'David', 'Bertrand', 'Roux', 'Vincent', 'Fournier', 'Morel', 'Girard', 'André', 'Lefevre', 'Mercier'];
+  
+  const comments = {
+    'Italienne': [
+      'Excellent restaurant ! Les pâtes sont délicieuses et bien cuites.',
+      'Très bonne cuisine italienne, je recommande vivement.',
+      'Service rapide et plats savoureux. Parfait !',
+      'Les pizzas sont excellentes, vraiment authentiques.',
+      'Restaurant de qualité, on y reviendra avec plaisir.',
+      'Très bon rapport qualité/prix, je recommande.',
+      'Délicieux ! Les plats sont copieux et bien préparés.',
+      'Excellent service et cuisine goûteuse. À essayer !',
+      'Très satisfait de la commande, tout était parfait.',
+      'Restaurant à ne pas manquer, cuisine authentique.'
+    ],
+    'Japonaise': [
+      'Sushis frais et délicieux ! Qualité au rendez-vous.',
+      'Très bon restaurant japonais, je recommande.',
+      'Excellent, les sushis sont vraiment frais.',
+      'Service rapide et produits de qualité. Parfait !',
+      'Très satisfait, les plats sont excellents.',
+      'Délicieux ! Je recommande vivement ce restaurant.',
+      'Très bon rapport qualité/prix, je reviendrai.',
+      'Excellent restaurant, cuisine authentique et savoureuse.',
+      'Service impeccable et plats délicieux. À essayer !',
+      'Très bon, les sushis sont frais et bien préparés.'
+    ],
+    'Américaine': [
+      'Excellent burger ! Les frites sont parfaites.',
+      'Très bon restaurant, les burgers sont délicieux.',
+      'Service rapide et qualité au rendez-vous. Parfait !',
+      'Très satisfait, les plats sont copieux et goûteux.',
+      'Excellent rapport qualité/prix, je recommande.',
+      'Délicieux ! Je reviendrai avec plaisir.',
+      'Très bon restaurant, burgers savoureux et bien préparés.',
+      'Service impeccable et plats délicieux. À essayer !',
+      'Très satisfait de la commande, tout était parfait.',
+      'Excellent, les burgers sont vraiment bons.'
+    ],
+    'Française': [
+      'Excellent restaurant ! Cuisine française authentique.',
+      'Très bon, les plats sont savoureux et bien préparés.',
+      'Service impeccable et cuisine de qualité. Parfait !',
+      'Très satisfait, je recommande vivement.',
+      'Excellent rapport qualité/prix, je reviendrai.',
+      'Délicieux ! Les plats sont copieux et goûteux.',
+      'Très bon restaurant, cuisine traditionnelle et savoureuse.',
+      'Service rapide et plats délicieux. À essayer !',
+      'Très satisfait de la commande, tout était parfait.',
+      'Excellent, la cuisine est vraiment bonne.'
+    ],
+    'Asiatique': [
+      'Excellent restaurant asiatique ! Les plats sont délicieux.',
+      'Très bon, je recommande vivement.',
+      'Service rapide et cuisine savoureuse. Parfait !',
+      'Très satisfait, les plats sont excellents.',
+      'Excellent rapport qualité/prix, je reviendrai.',
+      'Délicieux ! Les plats sont bien préparés.',
+      'Très bon restaurant, cuisine authentique et goûteuse.',
+      'Service impeccable et plats délicieux. À essayer !',
+      'Très satisfait de la commande, tout était parfait.',
+      'Excellent, la cuisine est vraiment savoureuse.'
+    ],
+    'Fast-Food': [
+      'Service rapide et efficace. Parfait !',
+      'Très bon rapport qualité/prix, je recommande.',
+      'Excellent, livraison rapide et plats chauds.',
+      'Très satisfait, je reviendrai avec plaisir.',
+      'Service rapide et plats délicieux. Parfait !',
+      'Très bon, je recommande vivement.',
+      'Excellent rapport qualité/prix, je reviendrai.',
+      'Service impeccable et livraison rapide. À essayer !',
+      'Très satisfait de la commande, tout était parfait.',
+      'Excellent, service rapide et efficace.'
+    ]
+  };
+  
+  const defaultComments = comments[cuisine] || comments['Italienne'];
+  
+  // Générer 10 avis avec des dates récentes (du plus récent au plus ancien)
+  const reviews = [];
+  const now = new Date();
+  
+  for (let i = 0; i < 10; i++) {
+    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
+    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
+    const author = `${firstName} ${lastName.charAt(0)}.`;
+    
+    // Générer une date entre aujourd'hui et 30 jours en arrière
+    const daysAgo = Math.floor(Math.random() * 30);
+    const reviewDate = new Date(now);
+    reviewDate.setDate(reviewDate.getDate() - daysAgo);
+    
+    // Générer une note entre 3 et 5 (majoritairement positives)
+    const rating = Math.random() < 0.7 ? 
+      (Math.random() < 0.5 ? 5 : 4) : 
+      (Math.random() < 0.5 ? 4.5 : 3.5);
+    
+    reviews.push({
+      id: `${restaurantId}-${i + 1}`,
+      rating: Math.round(rating * 10) / 10, // Arrondir à 1 décimale
+      comment: defaultComments[i] || defaultComments[Math.floor(Math.random() * defaultComments.length)],
+      date: reviewDate.toISOString().split('T')[0],
+      author: author
+    });
+  }
+  
+  // Trier par date décroissante (plus récent en premier)
+  return reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+}
+
+// Générer les avis mockés pour tous les restaurants (10 avis par restaurant)
+const mockReviews = {};
+mockRestaurants.forEach(restaurant => {
+  mockReviews[restaurant.id] = generateMockReviews(
+    restaurant.id,
+    restaurant.name,
+    restaurant.cuisine || 'Italienne'
+  );
+});
 
 // Note : Les vrais avis viendront du scraping Deliveroo une fois les sélecteurs CSS identifiés
-// Voir docs/AVIS_REELS.md pour plus d'informations
+// Pour l'instant, chaque restaurant a 10 avis mockés générés automatiquement
 
 module.exports = {
   mockRestaurants,
