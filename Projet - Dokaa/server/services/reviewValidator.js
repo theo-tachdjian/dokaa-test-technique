@@ -1,46 +1,46 @@
-// Validateur pour s'assurer qu'on ne récupère que de vrais avis de consommateurs
-// Filtre le contenu HTML, JS, cookies, etc.
+
+
 
 function isValidReview(comment) {
   if (!comment || typeof comment !== 'string') return false;
   
   const commentLower = comment.toLowerCase().trim();
   
-  // Longueur minimale
+  
   if (commentLower.length < 30) return false;
   
-  // EXCLURE TOUT ce qui ressemble à du code/HTML/URL
+  
   const excludePatterns = [
-    // Code/JavaScript
+    
     'function', 'var ', 'window', 'document', 'script', 'javascript',
     'use strict', 'attribute', 'data-noaft', 'visible',
-    // HTML/Tags
+    
     'aria-label', 'jsname', 'class=', 'div', 'span', 'input type',
     'quot;', '&quot;', '<', '>', 'href=', 'src=',
-    // URLs/Encodage
+    
     'http', 'https', 'www.', '.com', '.fr', 'url', 'encode',
     'restaurant25', 'restaurant20', '%20', '%26', 'u0026', 'u003d',
-    // Cookies/Confidentialité
+    
     'cookie', 'cookies', 'confidentialité', 'privacy', 'politique',
     'conditions', 'données', 'paramètres', 'settings', 'consent',
     'accepter', 'refuser', 'tout refuser', 'tout accepter',
-    // Classes CSS/IDs techniques
+    
     'services_cb', 'gm_grey', 'd4r55', 'jftief', 'myened', 'wi7pd',
     'mj7q1b', 'mulwjd', 'mypbod', 'nlolef', 'a0gyw',
-    // Autres patterns techniques
+    
     'gaeu003d', 'glu003d', 'hlu003d', 'cmu003d', 'pcu003d',
     'set_sc', 'set_ytc', 'set_aps', 'boq identity',
     'identityfrontenduiserver'
   ];
   
-  // Si contient un pattern exclu, ce n'est PAS un avis
+  
   for (const pattern of excludePatterns) {
     if (commentLower.includes(pattern)) {
       return false;
     }
   }
   
-  // Exclure les textes qui sont majoritairement des caractères spéciaux/encodés
+  
   const specialCharRatio = (comment.match(/[%&<>"=;:]/g) || []).length / comment.length;
   if (specialCharRatio > 0.1) { // Plus de 10% de caractères spéciaux = probablement du code
     return false;

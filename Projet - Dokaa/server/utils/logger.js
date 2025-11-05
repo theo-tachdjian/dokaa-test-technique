@@ -1,5 +1,5 @@
-// Logger simple pour le debug
-// Pas besoin de winston ou autre, console.log suffit pour un test
+
+
 
 const log = {
   info: (message, ...args) => {

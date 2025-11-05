@@ -1,5 +1,5 @@
-// Script de test pour vérifier que le scraping Google Maps fonctionne
-// Usage: node scripts/testGoogleMapsScraper.js "Sushi Express" "Paris"
+
+
 
 require('dotenv').config();
 const googleMapsScraper = require('../services/googleMapsScraper');

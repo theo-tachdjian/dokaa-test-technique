@@ -51,14 +51,14 @@ export default function Home() {
     loadRestaurantsByCity();
   }, [selectedCity, searchQuery]);
 
-  // Mettre à jour les résultats filtrés quand les résultats de recherche changent
+  
   useEffect(() => {
     if (searchQuery) {
       setFilteredRestaurants(results);
     }
   }, [results, searchQuery]);
 
-  // Afficher les résultats selon le contexte
+  
   const displayResults = searchQuery ? filteredRestaurants : filteredRestaurants;
   const restaurantsForFilter = searchQuery ? results : allRestaurants;
 

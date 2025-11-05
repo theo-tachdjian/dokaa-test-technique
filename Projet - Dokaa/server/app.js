@@ -2,14 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-// Charger l'enricheur de données au démarrage pour garantir des données réalistes
+
 try {
   require('./services/dataEnricher');
 } catch (error) {
   console.warn('⚠️  Erreur lors de l\'enrichissement des données:', error.message);
 }
 
-// Rate limiting basique pour éviter les abus et protéger le scraping
+
 let rateLimit;
 try {
   rateLimit = require('express-rate-limit');
@@ -27,15 +27,15 @@ app.use(express.json());
 
 if (rateLimit) {
   const limiter = rateLimit({
-    windowMs: 60 * 1000, // 1 minute
-    max: 60, // 60 requêtes/min par IP
+    windowMs: 60 * 1000, 
+    max: 60, 
     standardHeaders: true,
     legacyHeaders: false
   });
   app.use(limiter);
 }
 
-// Health check
+
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -44,10 +44,10 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// Routes
+
 app.use('/api/restaurants', require('./routes/restaurants'));
 
-// Gestion d'erreurs
+
 const errorHandler = require('./middleware/errorHandler');
 app.use(errorHandler);
 

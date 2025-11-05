@@ -1,5 +1,5 @@
-// Scraper DIRECT pour récupérer les VRAIS avis - approche plus agressive et précise
-// On va vraiment chercher les vrais avis, pas se contenter du premier texte trouvé
+
+
 
 let puppeteer;
 try {
@@ -11,7 +11,7 @@ try {
 class DirectReviewsScraper {
   constructor() {
     this.browser = null;
-    this.defaultGotoTimeoutMs = 60000; // Plus de temps
+    this.defaultGotoTimeoutMs = 60000; 
   }
 
   async init() {
@@ -20,7 +20,7 @@ class DirectReviewsScraper {
     }
     if (!this.browser) {
       this.browser = await puppeteer.launch({
-        headless: false, // Mode visible pour voir ce qui se passe
+        headless: false, 
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',
@@ -40,7 +40,7 @@ class DirectReviewsScraper {
     }
   }
 
-  // Scraper DIRECT depuis Google Maps avec une approche très précise
+  
   async scrapeReviews(restaurantName, city) {
     let page = null;
     
@@ -62,7 +62,7 @@ class DirectReviewsScraper {
 
       console.log(`\n🔍 [SCRAPING DIRECT] Recherche: ${restaurantName} à ${city}\n`);
 
-      // Étape 1 : Rechercher le restaurant
+      
       const searchQuery = encodeURIComponent(`${restaurantName} ${city} France`);
       const searchUrl = `https://www.google.com/maps/search/${searchQuery}`;
       
@@ -74,7 +74,7 @@ class DirectReviewsScraper {
 
       await page.waitForTimeout(5000);
 
-      // Étape 2 : Cliquer sur le premier résultat
+      
       console.log(`🔍 Clic sur le premier résultat...`);
       await page.evaluate(() => {
         const firstResult = document.querySelector('a[href*="/maps/place/"]');
@@ -86,10 +86,10 @@ class DirectReviewsScraper {
 
       await page.waitForTimeout(5000);
 
-      // Étape 3 : Trouver et cliquer sur le bouton "Avis"
+      
       console.log(`🔍 Recherche du bouton "Avis"...`);
       const reviewsButtonClicked = await page.evaluate(() => {
-        // Chercher tous les boutons/textes qui contiennent "avis" ou "review"
+        
         const allButtons = Array.from(document.querySelectorAll('button, a, div[role="button"], span'));
         
         for (const btn of allButtons) {
@@ -109,13 +109,13 @@ class DirectReviewsScraper {
         await page.waitForTimeout(5000);
       }
 
-      // Étape 4 : Scraper les VRAIS avis avec des sélecteurs très précis
+      
       console.log(`🔍 Extraction des avis...`);
       const reviews = await page.evaluate(() => {
         const reviews = [];
         
-        // Méthode 1 : Chercher les containers d'avis Google Maps (sélecteurs officiels)
-        // Les vrais avis sont dans des divs avec des classes spécifiques
+        
+        
         const selectors = [
           '[data-review-id]',
           '.jftiEf',
@@ -136,15 +136,15 @@ class DirectReviewsScraper {
           }
         }
         
-        // Si rien trouvé, chercher dans tout le DOM
+        
         if (reviewElements.length === 0) {
           console.log('⚠ Aucun élément trouvé avec les sélecteurs standards, recherche dans tout le DOM...');
           
-          // Chercher tous les divs qui contiennent du texte qui ressemble à un avis
+          
           const allDivs = document.querySelectorAll('div');
           reviewElements = Array.from(allDivs).filter(div => {
             const text = div.textContent.trim();
-            // Filtrer pour ne garder que ceux qui ressemblent à des avis
+            
             return text.length > 50 && 
                    text.length < 1000 &&
                    !text.includes('http') &&
@@ -161,9 +161,9 @@ class DirectReviewsScraper {
           });
         }
         
-        // Extraire les avis
+        
         reviewElements.slice(0, 10).forEach((el, idx) => {
-          // Extraire le texte - plusieurs méthodes
+          
           let comment = '';
           
           // Méthode A : Chercher un span avec classe spécifique pour le texte
@@ -200,7 +200,7 @@ class DirectReviewsScraper {
             comment = sentences.join('. ');
           }
           
-          // Nettoyer le commentaire
+          
           comment = comment
             .replace(/\s+/g, ' ')
             .replace(/[^\w\s.,!?;:'"àâäéèêëïîôùûüÿçÀÂÄÉÈÊËÏÎÔÙÛÜŸÇ-]/g, '')
@@ -215,7 +215,7 @@ class DirectReviewsScraper {
             return;
           }
           
-          // Extraire la note
+          
           let rating = 4;
           const ratingEl = el.querySelector('[aria-label*="star"], [aria-label*="étoile"], [class*="rating"]');
           if (ratingEl) {
@@ -234,7 +234,7 @@ class DirectReviewsScraper {
             }
           }
           
-          // Extraire la date
+          
           let date = new Date().toISOString().split('T')[0];
           const dateEl = el.querySelector('span[class*="date"], time, [class*="date"]');
           if (dateEl) {
@@ -278,7 +278,7 @@ class DirectReviewsScraper {
   }
 }
 
-// Instance singleton
+
 const scraper = new DirectReviewsScraper();
 
 module.exports = scraper;

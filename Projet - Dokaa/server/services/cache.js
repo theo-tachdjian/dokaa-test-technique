@@ -1,12 +1,12 @@
-// Cache simple en mémoire
-// Pas besoin de Redis pour un test technique
+
+
 
 class Cache {
   constructor() {
     this.cache = new Map();
     this.ttl = {
-      restaurants: 24 * 60 * 60 * 1000, // 24 heures
-      reviews: 60 * 60 * 1000 // 1 heure
+      restaurants: 24 * 60 * 60 * 1000, 
+      reviews: 60 * 60 * 1000 
     };
   }
 
@@ -31,7 +31,7 @@ class Cache {
     this.cache.clear();
   }
 
-  // Pour debug, voir ce qu'il y a dans le cache
+  
   getStats() {
     return {
       size: this.cache.size,

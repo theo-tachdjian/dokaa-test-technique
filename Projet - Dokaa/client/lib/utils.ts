@@ -1,4 +1,4 @@
-// Utilitaires divers
+
 
 export function formatDate(dateString: string): string {
   try {

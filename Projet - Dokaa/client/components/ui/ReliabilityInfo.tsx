@@ -18,7 +18,7 @@ export default function ReliabilityInfo({ restaurant }: ReliabilityInfoProps) {
   const reliabilityScore = validation.reliabilityScore || 0;
 
   if (reliabilityScore >= 90 && !validation.needsVerification) {
-    return null; // Pas besoin d'afficher si tout est bon
+    return null; 
   }
 
   return (

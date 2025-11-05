@@ -1,7 +1,7 @@
-// Données mises à jour avec de VRAIES adresses et avis
-// Généré le 2025-11-05T07:25:23.059Z
-// Adresses: 55/80 trouvées via OpenStreetMap
-// Avis: 55/80 trouvés via TripAdvisor
+
+
+
+
 
 const cities = [
   "Paris",

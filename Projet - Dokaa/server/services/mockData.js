@@ -1,14 +1,14 @@
-// Données mockées pour le développement
-// À remplacer par le scraping plus tard
 
-// Liste des villes disponibles
+
+
+
 const cities = [
   'Paris', 'Lyon', 'Marseille', 'Toulouse', 'Bordeaux', 
   'Nice', 'Nantes', 'Strasbourg', 'Lille', 'Montpellier'
 ];
 
 const mockRestaurants = [
-  // PARIS - 15 restaurants
+  
   {
     id: '1',
     name: 'Restaurant Italien',
@@ -26,7 +26,7 @@ const mockRestaurants = [
     name: 'Sushi Express',
     slug: 'sushi-express',
     city: 'Paris',
-    address: '15 Rue de la Paix, 75002 Paris', // Adresse réaliste
+    address: '15 Rue de la Paix, 75002 Paris', 
     rating: 4.5,
     imageUrl: 'https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=400',
     cuisine: 'Japonaise',
@@ -179,7 +179,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/paris/fish-chips'
   },
 
-  // LYON - 10 restaurants
+  
   {
     id: '16',
     name: 'Bouchon Lyonnais',
@@ -291,7 +291,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/lyon/sushi-express'
   },
 
-  // MARSEILLE - 9 restaurants
+  
   {
     id: '26',
     name: 'Le Panier',
@@ -392,7 +392,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/marseille/sushi-time'
   },
 
-  // TOULOUSE - 8 restaurants
+  
   {
     id: '35',
     name: 'Le Capitole',
@@ -482,7 +482,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/toulouse/le-bistrot'
   },
 
-  // BORDEAUX - 7 restaurants
+  
   {
     id: '43',
     name: 'Le Bordelais',
@@ -561,7 +561,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/bordeaux/restaurant-indien'
   },
 
-  // NICE - 7 restaurants
+  
   {
     id: '50',
     name: 'Le Niçois',
@@ -640,7 +640,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/nice/restaurant-indien'
   },
 
-  // NANTES - 6 restaurants
+  
   {
     id: '57',
     name: 'Le Nantais',
@@ -708,7 +708,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/nantes/tacos-nantes'
   },
 
-  // STRASBOURG - 6 restaurants
+  
   {
     id: '63',
     name: 'L\'Alsacien',
@@ -776,7 +776,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/strasbourg/tacos-strasbourg'
   },
 
-  // LILLE - 6 restaurants
+  
   {
     id: '69',
     name: 'Le Lillois',
@@ -844,7 +844,7 @@ const mockRestaurants = [
     url: 'https://deliveroo.fr/fr/restaurants/lille/tacos-lille'
   },
 
-  // MONTPELLIER - 6 restaurants
+  
   {
     id: '75',
     name: 'Le Montpellierain',
@@ -913,12 +913,12 @@ const mockRestaurants = [
   }
 ];
 
-// IMPORTANT : Les avis doivent être récupérés depuis Deliveroo via scraping
-// Les avis mockés ci-dessous sont UNIQUEMENT TEMPORAIRES pour le développement frontend
-// ATTENTION : Ces avis sont FAUX et seront remplacés par les vrais avis une fois le scraping configuré
-// En production, les vrais avis seront scrapés depuis les pages Deliveroo
 
-// Fonction pour générer des avis mockés réalistes (10 avis par restaurant)
+
+
+
+
+
 function generateMockReviews(restaurantId, restaurantName, cuisine) {
   const firstNames = ['Marie', 'Pierre', 'Sophie', 'Thomas', 'Emma', 'Lucas', 'Julie', 'Antoine', 'Camille', 'Nicolas', 'Laura', 'Maxime', 'Clara', 'Alexandre', 'Sarah', 'Paul', 'Léa', 'Hugo', 'Chloé', 'Benjamin'];
   const lastNames = ['Dupont', 'Martin', 'Bernard', 'Dubois', 'Moreau', 'Laurent', 'Simon', 'Michel', 'Lefebvre', 'Garcia', 'David', 'Bertrand', 'Roux', 'Vincent', 'Fournier', 'Morel', 'Girard', 'André', 'Lefevre', 'Mercier'];
@@ -1000,7 +1000,7 @@ function generateMockReviews(restaurantId, restaurantName, cuisine) {
   
   const defaultComments = comments[cuisine] || comments['Italienne'];
   
-  // Générer 10 avis avec des dates récentes (du plus récent au plus ancien)
+  
   const reviews = [];
   const now = new Date();
   
@@ -1009,30 +1009,30 @@ function generateMockReviews(restaurantId, restaurantName, cuisine) {
     const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
     const author = `${firstName} ${lastName.charAt(0)}.`;
     
-    // Générer une date entre aujourd'hui et 30 jours en arrière
+    
     const daysAgo = Math.floor(Math.random() * 30);
     const reviewDate = new Date(now);
     reviewDate.setDate(reviewDate.getDate() - daysAgo);
     
-    // Générer une note entre 3 et 5 (majoritairement positives)
+    
     const rating = Math.random() < 0.7 ? 
       (Math.random() < 0.5 ? 5 : 4) : 
       (Math.random() < 0.5 ? 4.5 : 3.5);
     
     reviews.push({
       id: `${restaurantId}-${i + 1}`,
-      rating: Math.round(rating * 10) / 10, // Arrondir à 1 décimale
+      rating: Math.round(rating * 10) / 10, 
       comment: defaultComments[i] || defaultComments[Math.floor(Math.random() * defaultComments.length)],
       date: reviewDate.toISOString().split('T')[0],
       author: author
     });
   }
   
-  // Trier par date décroissante (plus récent en premier)
+  
   return reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
 }
 
-// Générer les avis mockés pour tous les restaurants (10 avis par restaurant)
+
 const mockReviews = {};
 mockRestaurants.forEach(restaurant => {
   mockReviews[restaurant.id] = generateMockReviews(
@@ -1042,8 +1042,8 @@ mockRestaurants.forEach(restaurant => {
   );
 });
 
-// Note : Les vrais avis viendront du scraping Deliveroo une fois les sélecteurs CSS identifiés
-// Pour l'instant, chaque restaurant a 10 avis mockés générés automatiquement
+
+
 
 module.exports = {
   mockRestaurants,

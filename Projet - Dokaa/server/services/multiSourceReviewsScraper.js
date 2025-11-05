@@ -1,6 +1,6 @@
-// Scraper multi-sources pour récupérer les VRAIS avis de consommateurs
-// Essaie plusieurs sources : Google Maps, Deliveroo, Yelp
-// C'est VITAL pour le projet - on doit trouver des vrais avis
+
+
+
 
 const { isValidReview, cleanReview } = require('./reviewValidator');
 const { parseReviewsFromHTML } = require('./reviewParser');
@@ -17,7 +17,7 @@ try {
 class MultiSourceReviewsScraper {
   constructor() {
     this.browser = null;
-    this.defaultGotoTimeoutMs = 45000; // Plus de temps
+    this.defaultGotoTimeoutMs = 45000; 
   }
 
   async init() {
@@ -45,9 +45,9 @@ class MultiSourceReviewsScraper {
     }
   }
 
-  // Source 1 : Google Maps (le plus fiable) - SCRAPING DIRECT ET AGRESSIF
+  
   async scrapeFromGoogleMaps(restaurantName, city, address) {
-    // PRIORITÉ : Scraping direct avec mode visible pour vraiment trouver les avis
+    
     try {
       console.log(`\n🎯 [PRIORITÉ] Scraping DIRECT de ${restaurantName}...\n`);
       const directReviews = await directReviewsScraper.scrapeReviews(restaurantName, city);
@@ -59,7 +59,7 @@ class MultiSourceReviewsScraper {
       console.log(`⚠ Scraping direct échoué: ${error.message}`);
     }
     
-    // Fallback : interception réseau
+    
     try {
       const apiReviews = await googleMapsNetworkInterceptor.interceptReviews(restaurantName, city);
       if (apiReviews && apiReviews.length > 0) {
@@ -70,7 +70,7 @@ class MultiSourceReviewsScraper {
       console.log(`[GOOGLE MAPS] Interception réseau échouée`);
     }
     
-    // Fallback : scraping DOM classique
+    
     let page = null;
     try {
       const browser = await this.init();
@@ -97,18 +97,18 @@ class MultiSourceReviewsScraper {
 
       await page.waitForTimeout(4000);
 
-      // Cliquer sur le premier résultat
+      
       await page.evaluate(() => {
         const firstLink = document.querySelector('a[href*="/maps/place/"]');
         if (firstLink) firstLink.click();
       });
 
-      await page.waitForTimeout(5000); // Plus de temps pour que la page se charge
+      await page.waitForTimeout(5000); 
 
-      // Récupérer le HTML brut de la page
+      
       const pageHTML = await page.content();
       
-      // Parser le HTML pour extraire les vrais avis
+      
       const parsedReviews = parseReviewsFromHTML(pageHTML);
       
       if (parsedReviews && parsedReviews.length > 0) {
@@ -116,9 +116,9 @@ class MultiSourceReviewsScraper {
         return parsedReviews;
       }
 
-      // Méthode de fallback : essayer de scraper directement
+      
       const reviews = await page.evaluate(() => {
-        // Chercher et cliquer sur le bouton "Avis" ou section reviews
+        
         const reviewsButton = Array.from(document.querySelectorAll('button, a')).find(el => {
           const text = el.textContent.toLowerCase();
           return (text.includes('avis') || text.includes('review')) && (text.includes('étoile') || text.match(/\d+/));
@@ -128,21 +128,21 @@ class MultiSourceReviewsScraper {
           reviewsButton.click();
         }
 
-        // Attendre que les avis se chargent
+        
         return new Promise((resolve) => {
           setTimeout(() => {
             let reviews = [];
 
-            // Méthode 1 : Chercher les containers d'avis
+            
             const reviewContainers = document.querySelectorAll('[data-review-id], .jftiEf, .MyEned, .wiI7pd');
             
             if (reviewContainers.length > 0) {
               reviews = Array.from(reviewContainers).slice(0, 10).map((el, idx) => {
-                // Extraire le texte du commentaire
+                
                 const commentEl = el.querySelector('.wiI7pd, .MyEned, [class*="text"]');
                 const comment = commentEl ? commentEl.textContent.trim() : el.textContent.trim();
 
-                // Extraire la note
+                
                 const ratingEl = el.querySelector('[aria-label*="star"], [aria-label*="étoile"], [class*="rating"]');
                 let rating = 5;
                 if (ratingEl) {
@@ -155,7 +155,7 @@ class MultiSourceReviewsScraper {
                 const authorEl = el.querySelector('[class*="author"], [class*="name"], .d4r55');
                 const author = authorEl ? authorEl.textContent.trim() : `Google User ${idx + 1}`;
 
-                // Extraire la date
+                
                 const dateEl = el.querySelector('span[class*="date"], time');
                 let date = new Date().toISOString().split('T')[0];
                 if (dateEl) {
@@ -177,20 +177,20 @@ class MultiSourceReviewsScraper {
                     source: 'google'
                   };
                 }).filter(r => {
-                  // Utiliser le validateur pour s'assurer que c'est un vrai avis
+                  
                   return isValidReview(r.comment);
                 }).map(r => {
-                  // Nettoyer le commentaire
+                  
                   r.comment = cleanReview(r.comment);
                   return r;
                 });
             }
 
-            // FILTRER les avis pour ne garder que les vrais avis de consommateurs
+            
             reviews = reviews.filter(review => {
               const comment = review.comment.toLowerCase();
               
-              // Exclure les textes qui ne sont PAS des avis
+              
               const excludePatterns = [
                 'cookie', 'cookies', 'confidentialité', 'privacy', 'politique',
                 'conditions', 'données', 'paramètres', 'settings',
@@ -201,14 +201,14 @@ class MultiSourceReviewsScraper {
                 'page g', 'plus d\'options', 'gérer', 'manage'
               ];
               
-              // Si le commentaire contient un de ces mots, ce n'est pas un avis
+              
               for (const pattern of excludePatterns) {
                 if (comment.includes(pattern)) {
                   return false;
                 }
               }
               
-              // Vérifier que c'est un vrai avis (doit contenir des mots liés à la restauration)
+              
               const restaurantWords = [
                 'restaurant', 'plat', 'repas', 'manger', 'délicieux',
                 'bon', 'excellent', 'service', 'cuisine', 'goût',
@@ -216,7 +216,7 @@ class MultiSourceReviewsScraper {
                 'personnel', 'ambiance', 'prix', 'commande', 'livraison'
               ];
               
-              // Si ça ressemble à un avis (contient des mots de restauration OU fait plus de 30 caractères avec ponctuation)
+              
               const hasRestaurantWords = restaurantWords.some(word => comment.includes(word));
               const looksLikeReview = comment.length > 30 && (comment.includes('.') || comment.includes('!') || comment.includes('?'));
               
@@ -228,12 +228,12 @@ class MultiSourceReviewsScraper {
         });
       });
 
-      // Si on a des avis parsés, les utiliser
+      
       if (parsedReviews && parsedReviews.length > 0) {
         return parsedReviews;
       }
       
-      // Sinon, utiliser les avis scrappés directement
+      
       if (reviews && reviews.length > 0) {
         console.log(`[GOOGLE MAPS] ✓ ${reviews.length} avis trouvés`);
         return reviews;
@@ -245,12 +245,12 @@ class MultiSourceReviewsScraper {
       if (page) await page.close();
     }
     
-    // Si rien n'a fonctionné, retourner vide plutôt que des faux avis
+    
     console.log(`[GOOGLE MAPS] ⚠ Aucun avis valide trouvé`);
     return [];
   }
 
-      // Source 2 : Deliveroo (si on a l'URL)
+      
   async scrapeFromDeliveroo(deliverooUrl) {
     if (!deliverooUrl) return [];
     
@@ -275,7 +275,7 @@ class MultiSourceReviewsScraper {
       const reviews = await page.evaluate(() => {
         let reviews = [];
 
-        // Chercher les avis Deliveroo - sélecteurs plus précis
+        
         const reviewElements = document.querySelectorAll(
           '[data-testid*="review"], ' +
           '[class*="ReviewCard"], ' +
@@ -289,7 +289,7 @@ class MultiSourceReviewsScraper {
             const commentEl = el.querySelector('[class*="comment"], [class*="text"], p, [class*="review-text"]');
             let comment = commentEl ? commentEl.textContent.trim() : el.textContent.trim();
 
-            // Nettoyer le commentaire
+            
             comment = comment.replace(/\s+/g, ' ').trim();
 
             const ratingEl = el.querySelector('[class*="rating"], [class*="star"], [aria-label*="star"]');
@@ -312,12 +312,12 @@ class MultiSourceReviewsScraper {
               source: 'deliveroo'
             };
           }).filter(r => {
-            // Filtrer les vrais avis
+            
             if (!r.comment || r.comment.length < 20) return false;
             
             const commentLower = r.comment.toLowerCase();
             
-            // Exclure les textes non pertinents
+            
             const excludePatterns = [
               'cookie', 'confidentialité', 'privacy', 'function', 'var ',
               'window', 'document', 'script', 'accepter', 'refuser'
@@ -327,7 +327,7 @@ class MultiSourceReviewsScraper {
               if (commentLower.includes(pattern)) return false;
             }
             
-            // Doit ressembler à un avis de restaurant
+            
             const restaurantWords = ['restaurant', 'plat', 'repas', 'manger', 'délicieux', 'bon', 'excellent', 'service', 'cuisine', 'commande', 'livraison'];
             const hasRestaurantWords = restaurantWords.some(word => commentLower.includes(word));
             
@@ -351,7 +351,7 @@ class MultiSourceReviewsScraper {
     return [];
   }
 
-  // Source 3 : Yelp (si disponible)
+  
   async scrapeFromYelp(restaurantName, city) {
     let page = null;
     try {
@@ -374,7 +374,7 @@ class MultiSourceReviewsScraper {
 
       await page.waitForTimeout(3000);
 
-      // Cliquer sur le premier résultat
+      
       await page.evaluate(() => {
         const firstResult = document.querySelector('a[href*="/biz/"]');
         if (firstResult) firstResult.click();
@@ -420,14 +420,14 @@ class MultiSourceReviewsScraper {
     return [];
   }
 
-  // Méthode principale : essaie toutes les sources
+  
   async scrapeAllSources(restaurantName, city, address = null, deliverooUrl = null) {
     console.log(`\n🔍 Recherche d'avis RÉELS pour: ${restaurantName} (${city})`);
     console.log(`   Sources: Google Maps, Deliveroo, Yelp\n`);
 
     let allReviews = [];
 
-    // Source 1 : Google Maps (priorité absolue)
+    
     console.log('   → Tentative Google Maps...');
     const googleReviews = await this.scrapeFromGoogleMaps(restaurantName, city, address);
     if (googleReviews.length > 0) {
@@ -436,7 +436,7 @@ class MultiSourceReviewsScraper {
       return allReviews;
     }
 
-    // Source 2 : Deliveroo
+    
     if (deliverooUrl) {
       console.log('   → Tentative Deliveroo...');
       const deliverooReviews = await this.scrapeFromDeliveroo(deliverooUrl);
@@ -447,7 +447,7 @@ class MultiSourceReviewsScraper {
       }
     }
 
-    // Source 3 : Yelp
+    
     console.log('   → Tentative Yelp...');
     const yelpReviews = await this.scrapeFromYelp(restaurantName, city);
     if (yelpReviews.length > 0) {
@@ -461,7 +461,7 @@ class MultiSourceReviewsScraper {
   }
 }
 
-// Instance singleton
+
 const scraper = new MultiSourceReviewsScraper();
 
 module.exports = scraper;

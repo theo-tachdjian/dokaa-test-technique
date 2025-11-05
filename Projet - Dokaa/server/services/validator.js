@@ -1,5 +1,5 @@
-// Service de validation et vérification de fiabilité des données
-// Pour s'assurer que les restaurants sont bien sur Deliveroo et que les données sont correctes
+
+
 
 class DataValidator {
   constructor() {
@@ -7,7 +7,7 @@ class DataValidator {
     this.deliverooRestaurantUrlPattern = /deliveroo\.(fr|com|co\.uk|de|it|es|nl|be|at|ch|ie|dk|pl|se|no|fi)\/[^\/]+\/restaurants\/[^\/]+\/[^\/]+/i;
   }
 
-  // Vérifier qu'une URL est bien une URL Deliveroo valide
+  
   isValidDeliverooUrl(url) {
     if (!url || typeof url !== 'string') {
       return { valid: false, reason: 'URL manquante ou invalide' };
@@ -17,7 +17,7 @@ class DataValidator {
       return { valid: false, reason: 'URL ne correspond pas au domaine Deliveroo' };
     }
 
-    // Vérifier que c'est bien une URL de restaurant
+    
     if (!this.deliverooRestaurantUrlPattern.test(url)) {
       return { valid: false, reason: 'URL ne correspond pas au format attendu pour un restaurant Deliveroo' };
     }
@@ -25,13 +25,13 @@ class DataValidator {
     return { valid: true };
   }
 
-  // Vérifier qu'une adresse est valide (format basique)
+  
   isValidAddress(address) {
     if (!address || typeof address !== 'string' || address.trim().length === 0) {
       return { valid: false, reason: 'Adresse manquante' };
     }
 
-    // Vérifier qu'il y a au moins un numéro et une rue
+    
     const hasNumber = /\d+/.test(address);
     const hasStreet = /rue|avenue|boulevard|route|place|impasse|chemin|allée/i.test(address);
 
@@ -39,7 +39,7 @@ class DataValidator {
       return { valid: false, reason: 'Format d\'adresse invalide (doit contenir un numéro et une rue)' };
     }
 
-    // Vérifier qu'il y a un code postal français (5 chiffres)
+    
     const hasPostalCode = /\b\d{5}\b/.test(address);
     if (!hasPostalCode) {
       return { valid: false, reason: 'Code postal manquant ou invalide' };
@@ -48,7 +48,7 @@ class DataValidator {
     return { valid: true };
   }
 
-  // Vérifier qu'une note est valide
+  
   isValidRating(rating) {
     if (typeof rating !== 'number' || isNaN(rating)) {
       return { valid: false, reason: 'Note doit être un nombre' };
@@ -61,13 +61,13 @@ class DataValidator {
     return { valid: true };
   }
 
-  // Vérifier qu'un restaurant a toutes les données requises
+  
   validateRestaurant(restaurant) {
     const errors = [];
     const warnings = [];
     const verified = {};
 
-    // Vérifications obligatoires
+    
     if (!restaurant.id) {
       errors.push('ID manquant');
     }
@@ -98,7 +98,7 @@ class DataValidator {
       }
     }
 
-    // Vérifications optionnelles mais importantes
+    
     if (restaurant.rating !== undefined) {
       const ratingValidation = this.isValidRating(restaurant.rating);
       if (!ratingValidation.valid) {
@@ -122,9 +122,9 @@ class DataValidator {
       verified.city = true;
     }
 
-    // Calculer un score de fiabilité (0-100)
+    
     const verificationCount = Object.values(verified).filter(Boolean).length;
-    const totalChecks = 5; // address, deliverooUrl, rating, image, city
+    const totalChecks = 5; 
     const reliabilityScore = Math.round((verificationCount / totalChecks) * 100);
 
     return {
@@ -137,7 +137,7 @@ class DataValidator {
     };
   }
 
-  // Vérifier qu'un avis est valide et déterminer sa source
+  
   validateReview(review, restaurantUrl) {
     const errors = [];
     const warnings = [];
@@ -169,7 +169,7 @@ class DataValidator {
     if (!review.date) {
       warnings.push('Date manquante');
     } else {
-      // Vérifier que la date est valide
+      
       const date = new Date(review.date);
       if (isNaN(date.getTime())) {
         errors.push('Date invalide');
@@ -178,7 +178,7 @@ class DataValidator {
       }
     }
 
-    // Détecter la source probable de l'avis
+    
     let source = 'unknown';
     if (review.source) {
       source = review.source;
@@ -201,15 +201,15 @@ class DataValidator {
     };
   }
 
-  // Vérifier qu'un restaurant existe bien sur Deliveroo (en testant l'URL)
+  
   async verifyRestaurantExists(restaurantUrl) {
     if (!this.isValidDeliverooUrl(restaurantUrl).valid) {
       return { exists: false, reason: 'URL invalide' };
     }
 
-    // Pour l'instant, on suppose que si l'URL est valide, le restaurant existe
-    // En production, on pourrait faire un HEAD request pour vérifier
-    // Mais attention aux rate limits de Deliveroo
+    
+    
+    
     return { exists: true, verifiedAt: new Date().toISOString() };
   }
 }

@@ -1,5 +1,5 @@
-// Script de test pour vérifier que le scraping TripAdvisor fonctionne
-// Usage: node scripts/testTripAdvisorScraper.js "Sushi Express" "Paris"
+
+
 
 require('dotenv').config();
 const tripadvisorScraper = require('../services/tripadvisorScraper');
@@ -11,7 +11,7 @@ async function testScraper() {
   console.log(`\n🧪 Test du scraper TripAdvisor pour: ${restaurantName} (${city})\n`);
 
   try {
-    // Test 1: Recherche de l'adresse
+    
     console.log('📍 Test 1: Recherche de l\'adresse...');
     const addressInfo = await tripadvisorScraper.searchRestaurantAddress(restaurantName, city);
     
@@ -26,7 +26,7 @@ async function testScraper() {
 
     console.log('\n');
 
-    // Test 2: Recherche des avis
+    
     console.log('💬 Test 2: Recherche des avis...');
     const reviews = await tripadvisorScraper.scrapeRestaurantReviews(restaurantName, city);
     

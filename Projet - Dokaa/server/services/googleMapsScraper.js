@@ -1,6 +1,3 @@
-// Scraper Google Maps pour récupérer les vraies adresses des restaurants
-// Google Maps est plus fiable que TripAdvisor pour les adresses
-
 let puppeteer;
 try {
   puppeteer = require('puppeteer');
@@ -35,7 +32,7 @@ class GoogleMapsScraper {
     }
   }
 
-  // Rechercher une adresse réelle sur Google Maps
+  
   async searchRestaurantAddress(restaurantName, city) {
     let page = null;
     
@@ -47,7 +44,7 @@ class GoogleMapsScraper {
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       );
 
-      // Désactiver les détections de bot
+      
       await page.evaluateOnNewDocument(() => {
         Object.defineProperty(navigator, 'webdriver', {
           get: () => false,
@@ -56,7 +53,7 @@ class GoogleMapsScraper {
 
       console.log(`[GOOGLE MAPS] Recherche: ${restaurantName} à ${city}`);
       
-      // Construire l'URL de recherche Google Maps
+      
       const searchQuery = encodeURIComponent(`${restaurantName} ${city} France`);
       const searchUrl = `https://www.google.com/maps/search/${searchQuery}`;
       
@@ -65,18 +62,18 @@ class GoogleMapsScraper {
         timeout: this.defaultGotoTimeoutMs
       });
 
-      // Attendre que les résultats se chargent
+      
       await page.waitForTimeout(3000);
 
-      // Extraire l'adresse du premier résultat
+      
       const addressInfo = await page.evaluate(() => {
-        // Chercher le bouton d'adresse ou le texte de l'adresse
+        
         const addressElement = document.querySelector('[data-value="Address"] span, .Io6YTe, .rogA2c .Io6YTe');
         
         if (addressElement) {
           const address = addressElement.textContent.trim();
           
-          // Chercher aussi la note
+          
           const ratingElement = document.querySelector('[jsaction="pane.rating.moreReviews"] span, .F7nice span');
           let rating = null;
           if (ratingElement) {
@@ -93,11 +90,11 @@ class GoogleMapsScraper {
           };
         }
         
-        // Alternative : chercher dans le panneau latéral
+        
         const sidePanel = document.querySelector('[role="main"]');
         if (sidePanel) {
           const addressText = sidePanel.textContent;
-          // Chercher un pattern d'adresse française
+          
           const addressMatch = addressText.match(/(\d+[,\s]+(?:rue|avenue|boulevard|place|allée|cours|chemin|impasse|route)[^,]+,\s*\d{5}\s+[^,\n]+)/i);
           if (addressMatch) {
             return {
@@ -129,7 +126,7 @@ class GoogleMapsScraper {
   }
 }
 
-// Instance singleton
+
 const scraper = new GoogleMapsScraper();
 
 module.exports = scraper;

@@ -27,7 +27,7 @@ export function useSearch(query: string, city?: string) {
       } finally {
         setLoading(false);
       }
-    }, 300); // Debounce 300ms
+    }, 300); 
 
     return () => clearTimeout(searchTimer);
   }, [query, city]);

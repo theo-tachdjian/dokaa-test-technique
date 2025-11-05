@@ -1,4 +1,4 @@
-// Middleware de gestion d'erreurs un peu plus avancé
+
 
 const errorHandler = (err, req, res, next) => {
   console.error('Erreur:', {
@@ -8,7 +8,7 @@ const errorHandler = (err, req, res, next) => {
     method: req.method
   });
 
-  // Erreurs spécifiques
+  
   if (err.name === 'ValidationError') {
     return res.status(400).json({
       error: 'Erreur de validation',
@@ -23,7 +23,7 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  // Erreur générique
+  
   res.status(err.status || 500).json({
     error: 'Erreur interne du serveur',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined

@@ -1,5 +1,5 @@
-// Script pour mettre à jour TOUS les restaurants avec de vraies adresses et avis
-// Usage: npm run update-all-data
+
+
 
 require('dotenv').config();
 const { mockRestaurants } = require('../services/mockData');
@@ -23,7 +23,7 @@ async function updateAllRealData() {
     console.log(`\n[${i + 1}/${mockRestaurants.length}] ${restaurant.name} (${restaurant.city})`);
 
     try {
-      // 1. Récupérer la vraie adresse depuis OpenStreetMap
+      
       console.log('  → Recherche de l\'adresse réelle...');
       const addressInfo = await nominatimAPI.searchRestaurantAddress(restaurant.name, restaurant.city);
       
@@ -33,20 +33,20 @@ async function updateAllRealData() {
         console.log(`  ✓ Adresse trouvée: ${addressInfo.address}`);
       } else {
         console.log(`  ✗ Adresse non trouvée - RESTAURANT SUPPRIMÉ (pas de vraie adresse)`);
-        // Ne pas ajouter ce restaurant aux résultats
+        
         continue;
       }
 
-      // 2. RÉCUPÉRER LES VRAIS AVIS - ESSAIE TOUTES LES SOURCES (VITAL pour le projet)
+      
       let reviews = [];
       
       try {
-        // Utiliser le scraper multi-sources qui essaie Google Maps, Deliveroo, Yelp
+        
         reviews = await multiSourceReviewsScraper.scrapeAllSources(
           restaurant.name, 
           restaurant.city, 
           restaurant.address,
-          restaurant.url // URL Deliveroo si disponible
+          restaurant.url 
         );
         
         if (reviews && reviews.length > 0) {
@@ -61,7 +61,7 @@ async function updateAllRealData() {
         console.log(`     → Le restaurant sera gardé car il a une vraie adresse`);
       }
 
-      // Attendre entre les restaurants pour respecter les rate limits
+      
       if (i < mockRestaurants.length - 1) {
         await new Promise(resolve => setTimeout(resolve, 2000));
       }
@@ -74,7 +74,7 @@ async function updateAllRealData() {
     updatedRestaurants.push(restaurant);
   }
 
-  // Sauvegarder les données mises à jour
+  
   const outputPath = path.join(__dirname, '../services/mockDataReal.js');
   const outputContent = `// Données mises à jour avec de VRAIES adresses et avis
 // Généré le ${new Date().toISOString()}
@@ -105,12 +105,12 @@ module.exports = {
   console.log(`\n✅ ${updatedRestaurants.length} restaurants conservés (avec vraies adresses)`);
   console.log(`\n⚠️  Les données sont automatiquement chargées au démarrage du serveur\n`);
   
-  // Fermer les scrapers
+  
   await multiSourceReviewsScraper.close();
   process.exit(0);
 }
 
-// Lancer le script
+
 updateAllRealData().catch(error => {
   console.error('Erreur fatale:', error);
   process.exit(1);

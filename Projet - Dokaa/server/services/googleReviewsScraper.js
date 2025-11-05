@@ -1,5 +1,5 @@
-// Scraper pour récupérer les avis depuis Google Maps (plus fiable que TripAdvisor)
-// Google Maps a souvent plus d'avis et est plus accessible
+
+
 
 let puppeteer;
 try {
@@ -35,7 +35,7 @@ class GoogleReviewsScraper {
     }
   }
 
-  // Scraper les avis depuis Google Maps
+  
   async scrapeRestaurantReviews(restaurantName, city, address = null) {
     let page = null;
     
@@ -47,7 +47,7 @@ class GoogleReviewsScraper {
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       );
 
-      // Désactiver les détections de bot
+      
       await page.evaluateOnNewDocument(() => {
         Object.defineProperty(navigator, 'webdriver', {
           get: () => false,
@@ -56,7 +56,7 @@ class GoogleReviewsScraper {
 
       console.log(`[GOOGLE REVIEWS] Recherche: ${restaurantName} à ${city}`);
       
-      // Construire l'URL de recherche Google Maps
+      
       const searchQuery = encodeURIComponent(`${restaurantName} ${city} France`);
       const searchUrl = `https://www.google.com/maps/search/${searchQuery}`;
       
@@ -67,7 +67,7 @@ class GoogleReviewsScraper {
 
       await page.waitForTimeout(3000);
 
-      // Cliquer sur le premier résultat pour ouvrir le panneau latéral
+      
       await page.evaluate(() => {
         const firstResult = document.querySelector('[data-value="Directions"]')?.closest('a') || 
                            document.querySelector('a[href*="/maps/place/"]');
@@ -78,9 +78,9 @@ class GoogleReviewsScraper {
 
       await page.waitForTimeout(2000);
 
-      // Scraper les avis
+      
       const reviews = await page.evaluate(() => {
-        // Chercher le bouton "Avis" ou "Reviews" et cliquer dessus
+        
         const reviewsButton = Array.from(document.querySelectorAll('button, a')).find(el => {
           const text = el.textContent.toLowerCase();
           return text.includes('avis') || text.includes('review') || text.includes('étoile');
@@ -90,14 +90,14 @@ class GoogleReviewsScraper {
           reviewsButton.click();
         }
 
-        // Attendre un peu pour que les avis se chargent
+        
         return new Promise((resolve) => {
           setTimeout(() => {
-            // Sélecteurs pour les avis Google Maps
+            
             const reviewElements = document.querySelectorAll('[data-review-id], .wiI7pd, .MyEned, .review-text');
             
             if (reviewElements.length === 0) {
-              // Essayer d'autres sélecteurs
+              
               const altElements = document.querySelectorAll('[class*="review"], [class*="Review"]');
               if (altElements.length > 0) {
                 resolve(Array.from(altElements).slice(0, 10).map((el, index) => {
@@ -125,11 +125,11 @@ class GoogleReviewsScraper {
             }
 
             const reviews = Array.from(reviewElements).slice(0, 10).map((el, index) => {
-              // Extraire le commentaire
+              
               const commentElement = el.querySelector('.wiI7pd, .MyEned, .review-text, [class*="text"]');
               const comment = commentElement ? commentElement.textContent.trim() : el.textContent.trim();
               
-              // Extraire la note
+              
               const ratingElement = el.querySelector('[aria-label*="star"], [aria-label*="étoile"], [class*="rating"]');
               let rating = 5;
               if (ratingElement) {
@@ -153,7 +153,7 @@ class GoogleReviewsScraper {
                 }
               }
 
-              // Extraire l'auteur
+              
               const authorElement = el.querySelector('[class*="author"], [class*="name"]');
               const author = authorElement ? authorElement.textContent.trim() : `Google User ${index + 1}`;
 
@@ -190,7 +190,7 @@ class GoogleReviewsScraper {
   }
 }
 
-// Instance singleton
+
 const scraper = new GoogleReviewsScraper();
 
 module.exports = scraper;

@@ -28,7 +28,7 @@ describe('Restaurants routes', () => {
     const paris = await request(app).get('/api/restaurants/search').query({ city: 'Paris' });
     expect(paris.status).toBe(200);
     expect(Array.isArray(paris.body)).toBe(true);
-    // Paris results should be a subset (can't assert exact count without knowing mock)
+    
     expect(paris.body.length).toBeGreaterThan(0);
     expect(all.body.length).toBeGreaterThanOrEqual(paris.body.length);
   });

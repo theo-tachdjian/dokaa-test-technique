@@ -1,17 +1,17 @@
-// Parser pour extraire les vrais avis depuis le contenu HTML scrapé
-// "Traduit" le contenu brut en avis exploitables
+
+
 
 function parseReviewsFromHTML(htmlContent) {
   const reviews = [];
   
-  // Méthode 1 : Chercher les patterns d'avis typiques
-  // Les avis Google Maps ont souvent des structures comme :
-  // - "Excellent restaurant ! Les plats sont..."
-  // - "Très bon service, je recommande..."
-  // - "Délicieux, je reviendrai..."
+  
+  
+  
+  
+  
   
   const reviewPatterns = [
-    // Patterns français communs dans les avis
+    
     /(?:Excellent|Très bon|Délicieux|Parfait|Super|Bon|Génial|Formidable)[^.!?]{10,300}[.!?]/gi,
     /(?:Je recommande|Je reviendrai|À essayer|Très satisfait|Service|Plats|Cuisine)[^.!?]{10,300}[.!?]/gi,
     /(?:Restaurant|Repas|Commande|Livraison|Qualité|Prix|Ambiance)[^.!?]{10,300}[.!?]/gi
@@ -32,7 +32,7 @@ function parseReviewsFromHTML(htmlContent) {
     }
   }
   
-  // Méthode 2 : Extraire depuis les structures JSON cachées dans la page
+  
   try {
     const jsonMatches = htmlContent.match(/\[review.*?\]/gi);
     if (jsonMatches) {
@@ -57,15 +57,15 @@ function parseReviewsFromHTML(htmlContent) {
             });
           }
         } catch (e) {
-          // Pas du JSON valide, ignorer
+          
         }
       });
     }
   } catch (e) {
-    // Ignorer les erreurs de parsing JSON
+    
   }
   
-  // Méthode 3 : Extraire depuis les attributs data-*
+  
   const dataReviewMatches = htmlContent.match(/data-review[^>]*>([^<]{20,300})</gi);
   if (dataReviewMatches) {
     dataReviewMatches.forEach(match => {
@@ -82,7 +82,7 @@ function parseReviewsFromHTML(htmlContent) {
     });
   }
   
-  // Dédupliquer et trier par confiance
+  
   const uniqueReviews = [];
   const seen = new Set();
   
@@ -142,7 +142,7 @@ function isValidReviewText(text) {
     if (textLower.includes(pattern)) return false;
   }
   
-  // Doit contenir des mots liés à la restauration
+  
   const restaurantWords = [
     'restaurant', 'plat', 'plats', 'repas', 'manger', 'délicieux',
     'bon', 'excellent', 'service', 'cuisine', 'goût', 'qualité',
@@ -153,7 +153,7 @@ function isValidReviewText(text) {
   
   const hasRestaurantWords = restaurantWords.some(word => textLower.includes(word));
   
-  // Ou doit avoir une structure de phrase valide
+  
   const hasStructure = text.length > 30 && (
     text.includes('.') || 
     text.includes('!') || 
