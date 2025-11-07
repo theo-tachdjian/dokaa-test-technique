@@ -1,5 +1,4 @@
 
-
 const errorHandler = (err, req, res, next) => {
   console.error('Erreur:', {
     message: err.message,
@@ -8,7 +7,6 @@ const errorHandler = (err, req, res, next) => {
     method: req.method
   });
 
-  
   if (err.name === 'ValidationError') {
     return res.status(400).json({
       error: 'Erreur de validation',
@@ -23,7 +21,6 @@ const errorHandler = (err, req, res, next) => {
     });
   }
 
-  
   res.status(err.status || 500).json({
     error: 'Erreur interne du serveur',
     message: process.env.NODE_ENV === 'development' ? err.message : undefined
@@ -31,4 +28,4 @@ const errorHandler = (err, req, res, next) => {
 };
 
 module.exports = errorHandler;
-
+

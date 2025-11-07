@@ -1,0 +1,55 @@
+===== RAPPORT DES VILLES =====
+
+✅ VILLES OÙ ON PEUT CONSULTER LES RESTAURANTS (23):
+
+   - Paris: 150 restaurants
+   - Lille: 150 restaurants
+   - Lyon: 150 restaurants
+   - Toulouse: 150 restaurants
+   - Marseille: 100 restaurants
+   - Argenteuil: 95 restaurants
+   - Reims: 94 restaurants
+   - Nancy: 88 restaurants
+   - Rennes: 85 restaurants
+   - Le Mans: 67 restaurants
+   - Nîmes: 67 restaurants
+   - Metz: 65 restaurants
+   - Poitiers: 54 restaurants
+   - Saint-Denis: 53 restaurants
+   - Caen: 46 restaurants
+   - Aix-en-Provence: 34 restaurants
+   - Bordeaux: 25 restaurants
+   - Nantes: 25 restaurants
+   - Nice: 25 restaurants
+   - Strasbourg: 25 restaurants
+   - Le Havre: 21 restaurants
+   - Toulon: 20 restaurants
+   - Montpellier: 2 restaurants
+
+❌ VILLES OÙ ÇA N'A PAS MARCHÉ (22):
+
+   - Angers
+   - Dijon
+   - Grenoble
+   - Villeurbanne
+   - Clermont-Ferrand
+   - Brest
+   - Limoges
+   - Tours
+   - Amiens
+   - Perpignan
+   - Besançon
+   - Boulogne-Billancourt
+   - Orleans
+   - Mulhouse
+   - Rouen
+   - Montreuil
+   - Roubaix
+   - Tourcoing
+   - Nanterre
+   - Avignon
+   - Créteil
+   - Dunkerque
+
+📈 Total: 23 villes avec restaurants, 22 villes sans restaurants
+📊 Total restaurants: 1591

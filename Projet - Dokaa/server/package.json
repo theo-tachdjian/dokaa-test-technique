@@ -8,9 +8,21 @@
     "start": "node index.js",
     "test": "jest --runInBand",
     "test:watch": "jest --watch",
-    "test-scraper": "node scripts/testTripAdvisorScraper.js",
-    "test-googlemaps": "node scripts/testGoogleMapsScraper.js",
-    "update-all-data": "node scripts/updateAllRealData.js"
+    "test-graphql": "node scripts/testGraphQL.js",
+    "update-cookie": "node scripts/updateCookie.js",
+    "verify-cookie": "node scripts/verifyCookie.js",
+    "reset-circuit": "node scripts/resetCircuitBreaker.js",
+    "reset-circuit:ps": "powershell -ExecutionPolicy Bypass -File scripts/resetCircuitBreaker.ps1",
+    "force-fetch": "node scripts/forceFetchRestaurants.js",
+    "create-mock": "node scripts/createMockRestaurants.js",
+    "add-city": "node scripts/addCityFromPayload.js",
+    "add-restaurant": "node scripts/addRestaurant.js",
+    "fetch-partner-ids": "node scripts/fetchAllPartnerDrnIds.js",
+    "fetch-reviews": "node scripts/fetchAllReviews.js",
+    "test-restaurant": "node scripts/testRestaurantReview.js",
+    "test-delayed": "node scripts/testRestaurantDelayed.js",
+    "check-progress": "node scripts/checkProgress.js",
+    "check-progress-delayed": "node scripts/checkProgressDelayed.js"
   },
   "keywords": [],
   "author": "",
@@ -20,13 +32,11 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-rate-limit": "^7.4.0",
-    "puppeteer": "^21.0.0"
+    "express-rate-limit": "^7.4.0"
   },
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.0.1",
-    "strip-comments": "^2.0.1",
     "supertest": "^6.3.3"
   }
 }

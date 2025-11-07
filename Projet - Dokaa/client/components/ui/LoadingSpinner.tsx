@@ -16,4 +16,4 @@ export default function LoadingSpinner({ size = 'medium', className = '' }: Load
     </div>
   );
 }
-
+

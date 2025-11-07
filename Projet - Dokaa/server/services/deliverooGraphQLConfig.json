@@ -1,0 +1,29 @@
+{
+  "url": "https://api.fr.deliveroo.com/consumer/graphql/",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json, application/vnd.api+json",
+    "Accept-Language": "fr",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Origin": "https://deliveroo.fr",
+    "Referer": "https://deliveroo.fr/",
+    "Cookie": "_cf_bm=DuGX0isMIRArhMDrwO0MhcoxX1QkqJ70_slb2sGmeZA-1762494749-1.0.1.1-bBZ3EIIRDfD8tksTqzAlWt1cQ.VxlugMUfaZOzL8Txrf.ZR6t6lTc5mTfhtldEiJSTKtssJYd5OzjOOCHiguf45GIE7pvFsJpL5iLeCHyEla2FLPH3",
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36",
+    "x-roo-client": "consumer-web-app",
+    "x-roo-country": "fr",
+    "x-roo-platform": "web",
+    "x-roo-client-referer": "https://deliveroo.fr/fr/menu/Marseille/marseille-pointe-rouge/lauthentique-pointe-rouge?day=today&geohash=spey64vxu2hg&time=ASAP",
+    "x-roo-guid": "8956faf2-acfc-4613-9161-f7af7b721601",
+    "x-roo-session-guid": "9d2805a4-df57-4dbd-ae0c-97d8dda19c73",
+    "x-roo-sticky-guid": "8956faf2-acfc-4613-9161-f7af7b721601",
+    "x-roo-external-device-id": "",
+    "sec-ch-ua": "\"Chromium\";v=\"142\", \"Brave\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "sec-gpc": "1",
+    "priority": "u=1, i"
+  }
+}

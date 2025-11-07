@@ -16,7 +16,6 @@ export default function SortAndFilter({ restaurants, onFilteredChange }: SortAnd
   const [filterBy, setFilterBy] = useState<FilterOption>('all');
   const [minRating, setMinRating] = useState<number>(0);
 
-  
   const applyFiltersAndSort = (newSort?: SortOption, newFilter?: FilterOption, newMinRating?: number) => {
     const currentSort = newSort ?? sortBy;
     const currentFilter = newFilter ?? filterBy;
@@ -24,19 +23,16 @@ export default function SortAndFilter({ restaurants, onFilteredChange }: SortAnd
 
     let filtered = [...restaurants];
 
-    
     if (currentFilter === 'open') {
       filtered = filtered.filter(r => r.status === 'open');
     } else if (currentFilter === 'closed') {
       filtered = filtered.filter(r => r.status === 'closed');
     }
 
-    
     if (currentMinRating > 0) {
       filtered = filtered.filter(r => r.rating >= currentMinRating);
     }
 
-    
     filtered.sort((a, b) => {
       switch (currentSort) {
         case 'rating-desc':

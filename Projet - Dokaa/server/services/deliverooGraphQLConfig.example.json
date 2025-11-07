@@ -1,0 +1,28 @@
+{
+  "url": "https://api.fr.deliveroo.com/consumer/graphql/",
+  "headers": {
+    "Content-Type": "application/json",
+    "Accept": "application/json, application/vnd.api+json",
+    "Accept-Language": "fr",
+    "Origin": "https://deliveroo.fr",
+    "Referer": "https://deliveroo.fr/",
+    "Authorization": "Bearer VOTRE_VRAI_TOKEN_ICI_REMPLACEZ_LE_PLACEHOLDER",
+    "Cookie": "COLLER_LE_COOKIE_COMPLET_S_IL_EXISTE_DANS_POSTMAN",
+    "User-Agent": "COLLER_LE_USER_AGENT_COMPLET_DEPUIS_POSTMAN",
+    "x-roo-client": "consumer-web-app",
+    "x-roo-country": "fr",
+    "x-roo-platform": "web",
+    "x-roo-client-referer": "COLLER_LA_VALEUR_DEPUIS_POSTMAN",
+    "x-roo-guid": "COLLER_LA_VALEUR_DEPUIS_POSTMAN",
+    "x-roo-session-guid": "COLLER_LA_VALEUR_DEPUIS_POSTMAN",
+    "x-roo-sticky-guid": "COLLER_LA_VALEUR_DEPUIS_POSTMAN",
+    "sec-ch-ua": "\"Chromium\";v=\"142\", \"Brave\";v=\"142\", \"Not_A Brand\";v=\"99\"",
+    "sec-ch-ua-mobile": "?0",
+    "sec-ch-ua-platform": "\"Windows\"",
+    "sec-fetch-dest": "empty",
+    "sec-fetch-mode": "cors",
+    "sec-fetch-site": "cross-site",
+    "sec-gpc": "1",
+    "priority": "u=1, i"
+  }
+}

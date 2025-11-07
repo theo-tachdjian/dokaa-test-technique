@@ -1,6 +1,4 @@
 
-
-
 const log = {
   info: (message, ...args) => {
     console.log(`[INFO] ${new Date().toISOString()} - ${message}`, ...args);
@@ -16,4 +14,4 @@ const log = {
 };
 
 module.exports = log;
-
+

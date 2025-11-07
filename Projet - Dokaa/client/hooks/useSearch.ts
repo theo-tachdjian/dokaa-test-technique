@@ -34,4 +34,4 @@ export function useSearch(query: string, city?: string) {
 
   return { results, loading, error };
 }
-
+

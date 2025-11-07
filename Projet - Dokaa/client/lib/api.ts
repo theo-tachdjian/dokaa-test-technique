@@ -25,6 +25,8 @@ export interface Restaurant {
   cuisine?: string;
   status: 'open' | 'closed';
   url: string;
+  partner_drn_id?: string;
+  reviews?: Review[];
   _validation?: ValidationMetadata;
 }
 
@@ -49,13 +51,49 @@ export const api = {
     if (query) params.append('q', query);
     if (city) params.append('city', city);
     const response = await fetch(`${API_URL}/api/restaurants/search?${params.toString()}`);
-    if (!response.ok) throw new Error('Erreur lors de la recherche');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      if (response.status === 503) {
+        const minutes = errorData.retryAfter || '15';
+        throw new Error(`Service temporairement indisponible. Rate limiting actif. Réessayez dans ${minutes} minute(s).`);
+      }
+      if (errorData.details?.includes('Cloudflare') || errorData.details?.includes('Cookie')) {
+        throw new Error('Cookie Cloudflare expiré. Le serveur doit être mis à jour.');
+      }
+      throw new Error(errorData.error || errorData.details || 'Erreur lors de la recherche');
+    }
     return response.json();
   },
 
   async getRestaurantsByCity(city: string): Promise<Restaurant[]> {
     const response = await fetch(`${API_URL}/api/restaurants/city/${encodeURIComponent(city)}`);
-    if (!response.ok) throw new Error('Erreur lors de la récupération');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      if (response.status === 503) {
+        const minutes = errorData.retryAfter || '15';
+        throw new Error(`Service temporairement indisponible. Rate limiting actif. Réessayez dans ${minutes} minute(s).`);
+      }
+      if (errorData.details?.includes('Cloudflare') || errorData.details?.includes('Cookie')) {
+        throw new Error('Cookie Cloudflare expiré. Le serveur doit être mis à jour.');
+      }
+      throw new Error(errorData.error || errorData.details || 'Erreur lors de la récupération');
+    }
+    return response.json();
+  },
+
+  async getAllRestaurants(): Promise<Restaurant[]> {
+    const response = await fetch(`${API_URL}/api/restaurants/all`);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      if (response.status === 503) {
+        const minutes = errorData.retryAfter || '15';
+        throw new Error(`Service temporairement indisponible. Rate limiting actif. Réessayez dans ${minutes} minute(s).`);
+      }
+      if (errorData.details?.includes('Cloudflare') || errorData.details?.includes('Cookie')) {
+        throw new Error('Cookie Cloudflare expiré. Le serveur doit être mis à jour.');
+      }
+      throw new Error(errorData.error || errorData.details || 'Erreur lors de la récupération de tous les restaurants');
+    }
     return response.json();
   },
 
@@ -65,10 +103,30 @@ export const api = {
     return response.json();
   },
 
-  async getReviews(id: string): Promise<Review[]> {
-    const response = await fetch(`${API_URL}/api/restaurants/${id}/reviews`);
-    if (!response.ok) throw new Error('Impossible de récupérer les avis');
+  async getReviews(id: string, bypassCircuitBreaker = false): Promise<Review[]> {
+    const url = bypassCircuitBreaker 
+      ? `${API_URL}/api/restaurants/${id}/reviews?bypass=true`
+      : `${API_URL}/api/restaurants/${id}/reviews`;
+    
+    const response = await fetch(url);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      
+      if (response.status === 503 && !bypassCircuitBreaker) {
+        console.log('⚠️ Circuit breaker actif, tentative avec bypass...');
+        return this.getReviews(id, true);
+      }
+      
+      if (response.status === 503) {
+        const minutes = errorData.retryAfter || '15';
+        throw new Error(`Service temporairement indisponible. Rate limiting actif. Réessayez dans ${minutes} minute(s).`);
+      }
+      if (errorData.details?.includes('Cloudflare') || errorData.details?.includes('Cookie')) {
+        throw new Error('Cookie Cloudflare expiré. Le serveur doit être mis à jour.');
+      }
+      throw new Error(errorData.error || errorData.details || 'Impossible de récupérer les avis');
+    }
     return response.json();
   }
 };
-
+

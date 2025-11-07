@@ -17,17 +17,38 @@ export default function RestaurantDetailPage() {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [reviewsError, setReviewsError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [restaurantData, reviewsData] = await Promise.all([
-          api.getRestaurant(id),
-          api.getReviews(id)
-        ]);
+        const restaurantData = await api.getRestaurant(id);
         setRestaurant(restaurantData);
-        setReviews(reviewsData);
+        
+        if (restaurantData.reviews && restaurantData.reviews.length > 0) {
+          setReviews(restaurantData.reviews);
+          setReviewsError(null);
+        } else {
+          try {
+            console.log(`🔄 Tentative récupération avis pour restaurant ${id}...`);
+            const reviewsData = await api.getReviews(id);
+            if (reviewsData && reviewsData.length > 0) {
+              console.log(`✅ ${reviewsData.length} avis récupérés`);
+              setReviews(reviewsData);
+              setReviewsError(null);
+            } else {
+              console.log(`⚠️  Aucun avis trouvé pour ce restaurant`);
+              setReviews([]);
+              setReviewsError(null);
+            }
+          } catch (reviewErr) {
+            console.error('❌ Erreur récupération avis:', reviewErr);
+            const errorMessage = reviewErr instanceof Error ? reviewErr.message : 'Erreur inconnue';
+            setReviewsError(errorMessage);
+            setReviews([]);
+          }
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Erreur lors du chargement');
       } finally {
@@ -119,10 +140,10 @@ export default function RestaurantDetailPage() {
         </div>
 
         <div className="bg-white rounded-lg shadow-md p-6">
-          <ReviewsList reviews={reviews} loading={loading} />
+          <ReviewsList reviews={reviews} loading={loading} error={reviewsError} />
         </div>
       </div>
     </div>
   );
 }
-
+

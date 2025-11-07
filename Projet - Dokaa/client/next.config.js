@@ -1,6 +1,15 @@
 
 const nextConfig = {
   reactStrictMode: true,
+  webpack: (config, { dev }) => {
+    if (dev) {
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      }
+    }
+    return config
+  },
   images: {
     remotePatterns: [
       {
@@ -9,19 +18,15 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'rs-menus-api.roocdn.com',
+      },
+      {
+        protocol: 'https',
         hostname: 'co-restaurants.roocdn.com',
       },
       {
         protocol: 'https',
-        hostname: 'co-restaurants.roocdn',
-      },
-      {
-        protocol: 'https',
         hostname: '*.roocdn.com',
-      },
-      {
-        protocol: 'https',
-        hostname: '*.roocdn',
       },
       {
         protocol: 'https',
@@ -31,9 +36,17 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'www.deliveroo.fr',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.deliveroo.fr',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.deliveroo.fr',
+      },
     ],
   },
 }
 
 module.exports = nextConfig
-
+

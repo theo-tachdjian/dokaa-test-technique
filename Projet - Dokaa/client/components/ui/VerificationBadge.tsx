@@ -12,7 +12,6 @@ export default function VerificationBadge({ item, size = 'md' }: VerificationBad
 
   const validation = item._validation;
   
-  
   if ('address' in item) {
     const restaurant = item as Restaurant;
     const reliabilityScore = validation.reliabilityScore || 0;
@@ -60,7 +59,6 @@ export default function VerificationBadge({ item, size = 'md' }: VerificationBad
     }
   }
 
-  
   if ('source' in validation && validation.source) {
     const source = validation.source;
     const sourceLabels = {
@@ -93,4 +91,4 @@ export default function VerificationBadge({ item, size = 'md' }: VerificationBad
 
   return null;
 }
-
+

@@ -2,14 +2,6 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 
-
-try {
-  require('./services/dataEnricher');
-} catch (error) {
-  console.warn('⚠️  Erreur lors de l\'enrichissement des données:', error.message);
-}
-
-
 let rateLimit;
 try {
   rateLimit = require('express-rate-limit');
@@ -35,7 +27,6 @@ if (rateLimit) {
   app.use(limiter);
 }
 
-
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -44,13 +35,10 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-
 app.use('/api/restaurants', require('./routes/restaurants'));
-
 
 const errorHandler = require('./middleware/errorHandler');
 app.use(errorHandler);
 
 module.exports = app;
-
-
+

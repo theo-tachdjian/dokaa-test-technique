@@ -1,5 +1,4 @@
 
-
 export function formatDate(dateString: string): string {
   try {
     const date = new Date(dateString);
@@ -31,4 +30,4 @@ export function debounce<T extends (...args: any[]) => any>(
     timeout = setTimeout(later, wait);
   };
 }
-
+
